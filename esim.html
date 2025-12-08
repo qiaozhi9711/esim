@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalConnect eSIM - 全球漫游数据服务</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; color: #1F2937; }
+        html { scroll-behavior: smooth; }
+        
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 300px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        
+        .modal-scroll::-webkit-scrollbar { width: 8px; }
+        .modal-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .modal-scroll::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <nav class="fixed w-full z-50 glass-effect transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">E</div>
+                    <span class="font-bold text-xl tracking-tight text-gray-900">Global<span class="text-blue-600">Connect</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#destinations" class="text-gray-600 hover:text-blue-600 font-medium transition">热门目的地</a>
+                    <a href="#how-it-works" class="text-gray-600 hover:text-blue-600 font-medium transition">使用教程</a>
+                    <a href="#data-analysis" class="text-gray-600 hover:text-blue-600 font-medium transition">资费对比</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-500 hover:text-gray-900 font-medium text-sm border px-3 py-1 rounded-full">€ EUR</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-20 bg-gradient-to-br from-slate-50 to-blue-50 relative overflow-hidden">
+        <div class="absolute top-20 right-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div class="absolute top-40 -left-20 w-72 h-72 bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-blue-800 uppercase bg-blue-100 rounded-full">
+                🚀 全球 eSIM 流量超市
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">
+                连接世界，<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">无缝漫游</span>
+            </h1>
+            <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+                告别高昂漫游费。€1 起购，即买即用，覆盖全球 190+ 国家和地区。
+            </p>
+
+            <div class="max-w-2xl mx-auto bg-white p-2 rounded-2xl shadow-xl flex items-center border border-gray-100 transform transition hover:scale-[1.01]">
+                <div class="pl-4 text-gray-400 text-xl">🔍</div>
+                <input type="text" id="destination-search" placeholder="输入国家 (例如: 泰国, 英国...)" 
+                       class="w-full p-4 text-lg text-gray-700 outline-none rounded-xl" onkeyup="filterDestinations()">
+                <button class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg">
+                    搜索
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section id="destinations" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900">🔥 热门目的地</h2>
+                    <p class="text-gray-600 mt-2">覆盖全球 190+ 国家，点击选择套餐</p>
+                </div>
+                <div class="flex flex-wrap gap-2 bg-gray-50 p-1 rounded-lg shadow-sm border border-gray-200">
+                    <button class="px-3 py-1.5 text-sm font-medium rounded-md bg-white shadow-sm text-blue-700" onclick="filterCategory('all')">全部</button>
+                    <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('asia')">亚洲</button>
+                    <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('europe')">欧洲</button>
+                    <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('americas')">美洲</button>
+                    <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('other')">其他</button>
+                </div>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                </div>
+            <div id="no-results" class="hidden text-center py-20">
+                <h3 class="text-xl font-bold text-gray-900">未找到相关目的地</h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900">📱 3步轻松激活</h2>
+                <p class="text-gray-600 mt-4">无需插卡，扫描二维码即可连接全球网络</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">1</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">在线下单</h3>
+                    <p class="text-gray-600 text-sm">选择目的地和流量包，完成支付。系统将在 1 分钟内自动发送 eSIM 二维码。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">2</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">扫码安装</h3>
+                    <p class="text-gray-600 text-sm">打开手机设置 -> 蜂窝网络 -> 添加 eSIM。扫描邮件中的二维码即可。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">3</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">落地即连</h3>
+                    <p class="text-gray-600 text-sm">到达目的地后，开启“数据漫游”，手机将自动连接当地最佳网络。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="data-analysis" class="py-20 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">为什么选择 GlobalConnect?</h2>
+                <p class="text-gray-600 mt-2">不仅便宜，更稳定。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="bg-gray-50 rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">💰 资费对比 (7天/3GB)</h3>
+                    <div class="chart-container"><canvas id="costComparisonChart"></canvas></div>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">⚡ 4G/5G 覆盖指数</h3>
+                    <div class="chart-container"><canvas id="speedChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-white">支持</h4>
+                    <ul class="space-y-3">
+                        <li><a href="mailto:qiaozhi9711@gmail.com" class="text-gray-400 hover:text-white transition">qiaozhi9711@gmail.com</a></li>
+                        <li><button onclick="openInfoModal('help')" class="text-gray-400 hover:text-white transition text-left">常见问题 FAQ</button></li>
+                        <li><button onclick="openInfoModal('setup')" class="text-gray-400 hover:text-white transition text-left">如何设置 eSIM</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-white">店铺</h4>
+                    <ul class="space-y-3">
+                        <li><button onclick="openInfoModal('about')" class="text-gray-400 hover:text-white transition text-left">关于我们</button></li>
+                        <li><button onclick="openInfoModal('delivery')" class="text-gray-400 hover:text-white transition text-left">发货政策 (Delivery)</button></li>
+                        <li><button onclick="openInfoModal('refund')" class="text-gray-400 hover:text-white transition text-left">退款政策 (Refund)</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-white">信息</h4>
+                    <ul class="space-y-3">
+                        <li><button onclick="openInfoModal('contact')" class="text-gray-400 hover:text-white transition text-left">联系我们</button></li>
+                        <li><button onclick="openInfoModal('affiliate')" class="text-gray-400 hover:text-white transition text-left">联盟计划</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-white">法律条款</h4>
+                    <ul class="space-y-3">
+                        <li><button onclick="openInfoModal('privacy')" class="text-gray-400 hover:text-white transition text-left">隐私政策 (Privacy)</button></li>
+                        <li><button onclick="openInfoModal('terms')" class="text-gray-400 hover:text-white transition text-left">服务条款 (Terms)</button></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex space-x-6">
+                    <a href="javascript:void(0)" onclick="alert('社交媒体账号正在建设中...')" class="text-gray-400 hover:text-white text-2xl transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                    <a href="javascript:void(0)" onclick="alert('社交媒体账号正在建设中...')" class="text-gray-400 hover:text-white text-2xl transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    <a href="javascript:void(0)" onclick="alert('社交媒体账号正在建设中...')" class="text-gray-400 hover:text-white text-2xl transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                </div>
+                <div class="flex gap-4">
+                    <button class="bg-black border border-gray-600 rounded-lg px-3 py-1 flex items-center gap-2 hover:bg-gray-800 transition">
+                        <svg class="w-6 h-6 fill-white" viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg>
+                        <div class="text-left"><div class="text-[10px] leading-none text-gray-400">Download on the</div><div class="text-sm font-bold leading-tight">App Store</div></div>
+                    </button>
+                    <button class="bg-black border border-gray-600 rounded-lg px-3 py-1 flex items-center gap-2 hover:bg-gray-800 transition">
+                        <svg class="w-6 h-6 fill-white" viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+                        <div class="text-left"><div class="text-[10px] leading-none text-gray-400">GET IT ON</div><div class="text-sm font-bold leading-tight">Google Play</div></div>
+                    </button>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-xs text-gray-500">&copy; 2024 GlobalConnect Inc. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <div id="product-modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl fade-in">
+                    
+                    <div class="bg-gray-50 px-4 py-4 sm:px-6 border-b border-gray-100 flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <img id="modal-flag" src="" class="w-12 h-12 rounded-full shadow-sm object-cover bg-white">
+                            <div>
+                                <h3 class="text-2xl font-bold leading-6 text-gray-900" id="modal-title">--</h3>
+                                <p class="text-sm text-gray-500 mt-1">网络: <span id="modal-networks" class="font-medium text-blue-600">--</span></p>
+                            </div>
+                        </div>
+                        <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none" onclick="closeModal()">
+                            <span class="text-2xl">✖️</span>
+                        </button>
+                    </div>
+
+                    <div class="px-4 py-6 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2">
+                            <h4 class="text-lg font-bold text-gray-900 mb-4">选择流量包</h4>
+                            <div id="plans-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto modal-scroll pr-2">
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 h-fit flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-900 mb-4">订单摘要</h4>
+                                <div class="space-y-4 mb-6">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-500">所选套餐</span>
+                                        <span class="font-medium text-gray-900" id="summary-plan">未选择</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-500">有效期</span>
+                                        <span class="font-medium text-gray-900" id="summary-validity">--</span>
+                                    </div>
+                                    <div class="border-t border-gray-200 pt-4 flex justify-between items-center">
+                                        <span class="text-base font-bold text-gray-900">应付金额</span>
+                                        <span class="text-3xl font-bold text-blue-600" id="summary-price">€0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button id="buy-btn" onclick="buyDirectly()" disabled 
+                                    class="w-full bg-blue-600 text-white py-4 px-4 rounded-xl font-bold text-lg shadow-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2">
+                                请选择套餐
+                            </button>
+                            
+                            <p class="text-xs text-center text-gray-400 mt-3">🔒 Stripe 安全加密支付</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" onclick="closeInfoModal()"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl fade-in">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                        <h3 class="text-xl font-bold text-gray-900" id="info-title">Title</h3>
+                        <button type="button" class="text-gray-400 hover:text-gray-500" onclick="closeInfoModal()">
+                            <span class="text-2xl">✖️</span>
+                        </button>
+                    </div>
+                    <div class="px-6 py-6 max-h-[70vh] overflow-y-auto modal-scroll">
+                        <div id="info-content" class="prose prose-blue text-gray-600 text-sm leading-relaxed whitespace-pre-line">
+                            </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 text-right">
+                        <button class="bg-gray-900 text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-gray-700 transition" onclick="closeInfoModal()">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // 数据配置
+        // ============================================
+        const LINK_1  = "https://buy.stripe.com/7sY8wRfFdeGVgJx7iV14406";
+        const LINK_5  = "https://buy.stripe.com/7sY4gB64D8ixdxl32F14407";
+        const LINK_10 = "https://buy.stripe.com/14A3cxfFdaqF78X0Ux14408";
+        const LINK_20 = "https://buy.stripe.com/00w00leB956l2SH32F14409";
+        const LINK_50 = "https://buy.stripe.com/dRm00l8cLgP3eBp8mZ1440a";
+
+        const commonPlans = [
+            { id: '1', name: '体验包', validity: '1 天',  price: 1.00,  data: '300MB', stripeLink: LINK_1 },
+            { id: '5', name: '短途包', validity: '3 天',  price: 5.00,  data: '1GB',   stripeLink: LINK_5 },
+            { id: '10', name: '标准周卡', validity: '7 天',  price: 10.00, data: '3GB',   stripeLink: LINK_10 },
+            { id: '20', name: '深度游', validity: '15 天', price: 20.00, data: '10GB',  stripeLink: LINK_20 },
+            { id: '50', name: '商务包', validity: '30 天', price: 50.00, data: '25GB',  stripeLink: LINK_50 }
+        ];
+
+        const products = [
+            { id: 'jp', name: '日本 Japan', region: 'asia', flag: 'https://flagcdn.com/jp.svg', networks: 'Softbank / Docomo', rating: 4.9, sold: '50k+' },
+            { id: 'kr', name: '韩国 Korea', region: 'asia', flag: 'https://flagcdn.com/kr.svg', networks: 'SK Telecom', rating: 4.8, sold: '32k+' },
+            { id: 'th', name: '泰国 Thailand', region: 'asia', flag: 'https://flagcdn.com/th.svg', networks: 'AIS / TrueMove', rating: 4.9, sold: '40k+' },
+            { id: 'vn', name: '越南 Vietnam', region: 'asia', flag: 'https://flagcdn.com/vn.svg', networks: 'Viettel', rating: 4.7, sold: '15k+' },
+            { id: 'id', name: '印尼 Indonesia', region: 'asia', flag: 'https://flagcdn.com/id.svg', networks: 'Telkomsel', rating: 4.6, sold: '20k+' },
+            { id: 'eu', name: '欧洲 Europe', region: 'europe', flag: 'https://flagcdn.com/eu.svg', networks: 'Vodafone / Orange', rating: 4.9, sold: '80k+' },
+            { id: 'uk', name: '英国 UK', region: 'europe', flag: 'https://flagcdn.com/gb.svg', networks: 'EE / O2', rating: 4.8, sold: '25k+' },
+            { id: 'fr', name: '法国 France', region: 'europe', flag: 'https://flagcdn.com/fr.svg', networks: 'Orange', rating: 4.8, sold: '22k+' },
+            { id: 'es', name: '西班牙 Spain', region: 'europe', flag: 'https://flagcdn.com/es.svg', networks: 'Movistar', rating: 4.7, sold: '18k+' },
+            { id: 'tr', name: '土耳其 Turkey', region: 'europe', flag: 'https://flagcdn.com/tr.svg', networks: 'Turkcell', rating: 4.7, sold: '12k+' },
+            { id: 'us', name: '美国 USA', region: 'americas', flag: 'https://flagcdn.com/us.svg', networks: 'AT&T / T-Mobile', rating: 4.7, sold: '45k+' },
+            { id: 'au', name: '澳大利亚 Australia', region: 'other', flag: 'https://flagcdn.com/au.svg', networks: 'Telstra', rating: 4.8, sold: '10k+' },
+            { id: 'ae', name: '阿联酋 UAE', region: 'asia', flag: 'https://flagcdn.com/ae.svg', networks: 'Etisalat', rating: 4.9, sold: '8k+' },
+            { id: 'za', name: '南非 South Africa', region: 'other', flag: 'https://flagcdn.com/za.svg', networks: 'Vodacom', rating: 4.5, sold: '5k+' },
+        ].map(p => ({ ...p, plans: commonPlans.map(plan => ({...plan, id: p.id + '-' + plan.id})) }));
+
+        // ----------------------------------------------------
+        // 底部法律条款内容库 (供弹窗使用)
+        // ----------------------------------------------------
+        const infoContent = {
+            'about': "GlobalConnect Inc. 致力于为全球旅行者提供最便捷、最实惠的 eSIM 数据服务。\n\n我们成立于 2024 年，总部位于新加坡，旨在通过技术消除国际漫游费。目前，我们的服务覆盖全球 190 多个国家和地区，已为超过 10 万名用户提供服务。\n\n我们的使命是让连接变得简单，无论您身在何处。",
+            'privacy': "我们非常重视您的隐私。\n\n1. 数据收集：我们仅收集处理订单所需的必要信息（如电子邮件地址）。\n2. 支付安全：所有支付均由 Stripe 安全处理，我们不会接触或存储您的信用卡信息。\n3. 数据使用：您的数据仅用于 eSIM 发货和客户服务，绝不会出售给第三方。\n\n如果您要求删除您的数据，请联系 qiaozhi9711@gmail.com。",
+            'terms': "使用本网站即表示您同意以下条款：\n\n1. 服务性质：我们要销售的是数字 eSIM 产品，非实体卡。\n2. 设备兼容性：购买前，用户有责任确认其手机支持 eSIM 功能。\n3. 严禁转售：未经授权，禁止转售我们的二维码。\n4. 免责声明：网络信号受当地运营商基站覆盖影响，我们在特定死角无法保证 100% 信号。",
+            'refund': "我们的退款保障政策：\n\n1. 100% 全额退款：如果 eSIM 因技术原因无法在您的设备上激活，我们将全额退款。\n2. 申请时效：请在购买后 30 天内联系我们。\n3. 不可退款情况：如果您购买后发现手机不支持 eSIM，或者已经激活并使用了数据流量，通常不予退款。\n\n退款处理时间通常为 3-5 个工作日。",
+            'delivery': "发货政策 (Digital Delivery)：\n\n1. 发货方式：电子邮件发送二维码 (QR Code)。\n2. 发货时间：支付成功后，系统会自动发送邮件，通常在 1-2 分钟内到达。\n3. 未收到邮件：请检查垃圾邮件箱 (Spam)。如果 10 分钟后仍未收到，请联系客服。",
+            'contact': "联系我们：\n\n客户支持邮箱: qiaozhi9711@gmail.com\n工作时间: 24/7 全天候支持\n\n如果您遇到连接问题，请在邮件中附上订单号和手机型号，以便我们快速为您解决。",
+            'help': "常见问题 (FAQ)：\n\nQ: 我需要插卡吗？\nA: 不需要，eSIM 是虚拟卡，扫码即可用。\n\nQ: 可以保留原来的号码吗？\nA: 可以，您可以同时使用原号接打电话，用 eSIM 上网。\n\nQ: 到达目的地前可以激活吗？\nA: 建议在出发当天或到达后激活。",
+            'setup': "设置教程：\n\n1. iOS: 设置 > 蜂窝网络 > 添加 eSIM > 扫描二维码。\n2. Android: 设置 > 网络和互联网 > SIM 卡 > 添加 > 扫描二维码。\n\n注意：激活时需要连接 WiFi 网络。",
+            'affiliate': "加入我们的联盟计划：\n\n如果您是旅游博主或网站管理员，欢迎推广我们的 eSIM。\n请发送邮件至 qiaozhi9711@gmail.com 获取详细佣金方案。"
+        };
+
+        // ----------------------------------------------------
+        // 核心逻辑
+        // ----------------------------------------------------
+        let selectedPlan = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            initCharts();
+        });
+
+        function renderProducts(filter = 'all', searchTerm = '') {
+            const grid = document.getElementById('product-grid');
+            const noResults = document.getElementById('no-results');
+            grid.innerHTML = '';
+            const filtered = products.filter(p => {
+                const matchesCategory = filter === 'all' || p.region === filter || (filter === 'other' && p.region === 'other');
+                const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                filtered.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-2xl p-5 cursor-pointer transition duration-300 border border-gray-100 hover:shadow-xl hover:border-blue-100 flex flex-col justify-between group h-full';
+                    card.onclick = () => openModal(p.id);
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="w-16 h-16 rounded-full bg-gray-50 border border-gray-100 shadow-sm overflow-hidden group-hover:scale-110 transition duration-300">
+                                    <img src="${p.flag}" alt="${p.name}" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-xl text-gray-900 mb-1 group-hover:text-blue-600 transition">${p.name}</h3>
+                            <div class="flex items-center gap-3 text-sm text-gray-400 mb-6">
+                                <div class="flex items-center text-yellow-400"><span>★</span><span class="text-gray-600 font-medium ml-1">${p.rating}</span></div>
+                                <span class="w-1 h-1 bg-gray-300 rounded-full"></span><span>${p.sold} 人已选购</span>
+                            </div>
+                        </div>
+                        <div class="mt-2"><button class="w-full bg-gray-50 text-blue-600 font-bold py-3 px-4 rounded-xl transition duration-300 group-hover:bg-blue-600 group-hover:text-white flex justify-center items-center"><span class="text-sm">查看详细套餐</span></button></div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function filterCategory(c) { renderProducts(c); }
+        function filterDestinations() { renderProducts('all', document.getElementById('destination-search').value); }
+
+        function openModal(pid) {
+            const product = products.find(p => p.id === pid);
+            if (!product) return;
+            selectedPlan = null;
+            updateSummary();
+            document.getElementById('modal-flag').src = product.flag;
+            document.getElementById('modal-title').textContent = product.name;
+            document.getElementById('modal-networks').textContent = product.networks;
+            const container = document.getElementById('plans-container');
+            container.innerHTML = '';
+            product.plans.forEach(plan => {
+                const div = document.createElement('div');
+                div.className = 'border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition flex justify-between items-center group';
+                div.onclick = () => selectPlan(plan, div);
+                div.innerHTML = `<div><div class="font-bold text-gray-900 text-lg group-hover:text-blue-700">${plan.data}</div><div class="text-xs text-gray-500 mt-1">${plan.name} · ${plan.validity}</div></div><div class="text-blue-600 font-bold text-xl">€${plan.price.toFixed(0)}</div>`;
+                container.appendChild(div);
+            });
+            document.getElementById('product-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() { document.getElementById('product-modal').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+
+        function selectPlan(plan, el) {
+            selectedPlan = plan;
+            Array.from(document.getElementById('plans-container').children).forEach(child => { child.className = 'border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition flex justify-between items-center group'; });
+            el.className = 'border-2 border-blue-600 bg-blue-50 rounded-xl p-4 cursor-pointer flex justify-between items-center shadow-md';
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const btn = document.getElementById('buy-btn');
+            if (selectedPlan) {
+                document.getElementById('summary-plan').textContent = selectedPlan.data + " (" + selectedPlan.name + ")";
+                document.getElementById('summary-validity').textContent = selectedPlan.validity;
+                document.getElementById('summary-price').textContent = `€${selectedPlan.price.toFixed(2)}`;
+                btn.disabled = false;
+                btn.innerHTML = `立即支付 €${selectedPlan.price.toFixed(2)}`;
+            } else {
+                document.getElementById('summary-plan').textContent = '未选择';
+                document.getElementById('summary-validity').textContent = '--';
+                document.getElementById('summary-price').textContent = '€0.00';
+                btn.disabled = true;
+                btn.innerHTML = '请选择套餐';
+            }
+        }
+
+        function buyDirectly() {
+            if (!selectedPlan || !selectedPlan.stripeLink) { alert("配置错误：该套餐未绑定支付链接"); return; }
+            const btn = document.getElementById('buy-btn');
+            btn.disabled = true;
+            btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> 正在跳转...`;
+            setTimeout(() => { window.location.href = selectedPlan.stripeLink; }, 800);
+        }
+
+        // --- 信息弹窗逻辑 ---
+        function openInfoModal(key) {
+            const content = infoContent[key];
+            const titles = {
+                'about': '关于我们', 'privacy': '隐私政策', 'terms': '服务条款', 'refund': '退款政策',
+                'delivery': '发货政策', 'contact': '联系我们', 'help': '常见问题', 'setup': '设置教程', 'affiliate': '联盟计划'
+            };
+            if(content) {
+                document.getElementById('info-title').textContent = titles[key] || '信息';
+                document.getElementById('info-content').textContent = content;
+                document.getElementById('info-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeInfoModal() { document.getElementById('info-modal').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+
+        function initCharts() {
+            const ctxCost = document.getElementById('costComparisonChart').getContext('2d');
+            new Chart(ctxCost, { type: 'bar', data: { labels: ['传统漫游', 'Wi-Fi租赁', 'GlobalConnect'], datasets: [{ data: [12, 8.5, 1], backgroundColor: ['#e5e7eb', '#e5e7eb', '#2563eb'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display:false} } } });
+            const ctxSpeed = document.getElementById('speedChart').getContext('2d');
+            new Chart(ctxSpeed, { type: 'line', data: { labels: ['亚洲', '北美', '欧洲', '东南亚'], datasets: [{ data: [85, 72, 68, 55], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display:false} } } });
+        }
+    </script>
+</body>
+</html>
