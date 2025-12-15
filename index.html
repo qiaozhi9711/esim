@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlobalConnect eSIM - 全球漫游数据服务</title>
+    <title>GlobalConnect eSIM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -34,12 +34,15 @@
                     <span class="font-bold text-xl tracking-tight text-gray-900">Global<span class="text-blue-600">Connect</span></span>
                 </div>
                 <div class="hidden md:flex space-x-8">
-                    <a href="#destinations" class="text-gray-600 hover:text-blue-600 font-medium transition">热门目的地</a>
-                    <a href="#how-it-works" class="text-gray-600 hover:text-blue-600 font-medium transition">使用教程</a>
-                    <a href="#data-analysis" class="text-gray-600 hover:text-blue-600 font-medium transition">资费对比</a>
+                    <a href="#destinations" class="text-gray-600 hover:text-blue-600 font-medium transition" data-i18n="nav_dest">热门目的地</a>
+                    <a href="#how-it-works" class="text-gray-600 hover:text-blue-600 font-medium transition" data-i18n="nav_help">使用教程</a>
+                    <a href="#data-analysis" class="text-gray-600 hover:text-blue-600 font-medium transition" data-i18n="nav_cost">资费对比</a>
                 </div>
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-3">
                     <button class="text-gray-500 hover:text-gray-900 font-medium text-sm border px-3 py-1 rounded-full">€ EUR</button>
+                    <button onclick="toggleLanguage()" class="bg-gray-100 hover:bg-gray-200 text-blue-700 font-bold text-sm px-3 py-1 rounded-full transition flex items-center gap-1">
+                        <span id="lang-icon">🌐</span> <span id="lang-text">EN</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -50,13 +53,13 @@
         <div class="absolute top-40 -left-20 w-72 h-72 bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-blue-800 uppercase bg-blue-100 rounded-full">
+            <div class="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-blue-800 uppercase bg-blue-100 rounded-full" data-i18n="hero_badge">
                 🚀 全球 eSIM 流量超市
             </div>
             <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">
-                连接世界，<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">无缝漫游</span>
+                <span data-i18n="hero_title_1">连接世界，</span><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500" data-i18n="hero_title_2">无缝漫游</span>
             </h1>
-            <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+            <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto" data-i18n="hero_desc">
                 告别高昂漫游费。€1 起购，即买即用，覆盖全球 190+ 国家和地区。
             </p>
 
@@ -64,7 +67,7 @@
                 <div class="pl-4 text-gray-400 text-xl">🔍</div>
                 <input type="text" id="destination-search" placeholder="输入国家 (例如: 泰国, 英国...)" 
                        class="w-full p-4 text-lg text-gray-700 outline-none rounded-xl" onkeyup="filterDestinations()">
-                <button class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg">
+                <button class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg" data-i18n="btn_search">
                     搜索
                 </button>
             </div>
@@ -75,22 +78,22 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900">🔥 热门目的地</h2>
-                    <p class="text-gray-600 mt-2">覆盖全球 190+ 国家，点击选择套餐</p>
+                    <h2 class="text-3xl font-bold text-gray-900" data-i18n="sec_dest_title">🔥 热门目的地</h2>
+                    <p class="text-gray-600 mt-2" data-i18n="sec_dest_sub">覆盖全球 190+ 国家，点击选择套餐</p>
                 </div>
                 <div class="flex flex-wrap gap-2 bg-gray-50 p-1 rounded-lg shadow-sm border border-gray-200">
-                    <button class="px-3 py-1.5 text-sm font-medium rounded-md bg-white shadow-sm text-blue-700" onclick="filterCategory('all')">全部</button>
-                    <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('asia')">亚洲</button>
-                    <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('europe')">欧洲</button>
-                    <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('americas')">美洲</button>
-                    <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('other')">其他</button>
+                    <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-md bg-white shadow-sm text-blue-700" onclick="filterCategory('all')" data-i18n="filter_all">全部</button>
+                    <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('asia')" data-i18n="filter_asia">亚洲</button>
+                    <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('europe')" data-i18n="filter_europe">欧洲</button>
+                    <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('americas')" data-i18n="filter_americas">美洲</button>
+                    <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100" onclick="filterCategory('other')" data-i18n="filter_other">其他</button>
                 </div>
             </div>
 
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 </div>
             <div id="no-results" class="hidden text-center py-20">
-                <h3 class="text-xl font-bold text-gray-900">未找到相关目的地</h3>
+                <h3 class="text-xl font-bold text-gray-900" data-i18n="no_results">未找到相关目的地</h3>
             </div>
         </div>
     </section>
@@ -98,24 +101,24 @@
     <section id="how-it-works" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900">📱 3步轻松激活</h2>
-                <p class="text-gray-600 mt-4">无需插卡，扫描二维码即可连接全球网络</p>
+                <h2 class="text-3xl font-bold text-gray-900" data-i18n="sec_step_title">📱 3步轻松激活</h2>
+                <p class="text-gray-600 mt-4" data-i18n="sec_step_sub">无需插卡，扫描二维码即可连接全球网络</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                     <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">1</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">在线下单</h3>
-                    <p class="text-gray-600 text-sm">选择目的地和流量包，完成支付。系统将在 1 分钟内自动发送 eSIM 二维码。</p>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2" data-i18n="step_1_title">在线下单</h3>
+                    <p class="text-gray-600 text-sm" data-i18n="step_1_desc">选择目的地和流量包，完成支付。系统将在 1 分钟内自动发送 eSIM 二维码。</p>
                 </div>
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                     <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">2</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">扫码安装</h3>
-                    <p class="text-gray-600 text-sm">打开手机设置 -> 蜂窝网络 -> 添加 eSIM。扫描邮件中的二维码即可。</p>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2" data-i18n="step_2_title">扫码安装</h3>
+                    <p class="text-gray-600 text-sm" data-i18n="step_2_desc">打开手机设置 -> 蜂窝网络 -> 添加 eSIM。扫描邮件中的二维码即可。</p>
                 </div>
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                     <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">3</div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">落地即连</h3>
-                    <p class="text-gray-600 text-sm">到达目的地后，开启“数据漫游”，手机将自动连接当地最佳网络。</p>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2" data-i18n="step_3_title">落地即连</h3>
+                    <p class="text-gray-600 text-sm" data-i18n="step_3_desc">到达目的地后，开启“数据漫游”，手机将自动连接当地最佳网络。</p>
                 </div>
             </div>
         </div>
@@ -124,16 +127,16 @@
     <section id="data-analysis" class="py-20 bg-white border-t border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900">为什么选择 GlobalConnect?</h2>
-                <p class="text-gray-600 mt-2">不仅便宜，更稳定。</p>
+                <h2 class="text-3xl font-bold text-gray-900" data-i18n="sec_why_title">为什么选择 GlobalConnect?</h2>
+                <p class="text-gray-600 mt-2" data-i18n="sec_why_sub">不仅便宜，更稳定。</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div class="bg-gray-50 rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">💰 资费对比 (7天/3GB)</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2" data-i18n="chart_cost_title">💰 资费对比 (7天/3GB)</h3>
                     <div class="chart-container"><canvas id="costComparisonChart"></canvas></div>
                 </div>
                 <div class="bg-gray-50 rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">⚡ 4G/5G 覆盖指数</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2" data-i18n="chart_speed_title">⚡ 4G/5G 覆盖指数</h3>
                     <div class="chart-container"><canvas id="speedChart"></canvas></div>
                 </div>
             </div>
@@ -144,55 +147,44 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
                 <div>
-                    <h4 class="text-lg font-bold mb-6 text-white">支持</h4>
+                    <h4 class="text-lg font-bold mb-6 text-white" data-i18n="footer_support">支持</h4>
                     <ul class="space-y-3">
                         <li><a href="mailto:qiaozhi9711@gmail.com" class="text-gray-400 hover:text-white transition">qiaozhi9711@gmail.com</a></li>
-                        <li><button onclick="openInfoModal('help')" class="text-gray-400 hover:text-white transition text-left">常见问题 FAQ</button></li>
-                        <li><button onclick="openInfoModal('setup')" class="text-gray-400 hover:text-white transition text-left">如何设置 eSIM</button></li>
+                        <li><button onclick="openInfoModal('help')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_faq">常见问题 FAQ</button></li>
+                        <li><button onclick="openInfoModal('setup')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_setup">如何设置 eSIM</button></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold mb-6 text-white">店铺</h4>
+                    <h4 class="text-lg font-bold mb-6 text-white" data-i18n="footer_shop">店铺</h4>
                     <ul class="space-y-3">
-                        <li><button onclick="openInfoModal('about')" class="text-gray-400 hover:text-white transition text-left">关于我们</button></li>
-                        <li><button onclick="openInfoModal('delivery')" class="text-gray-400 hover:text-white transition text-left">发货政策 (Delivery)</button></li>
-                        <li><button onclick="openInfoModal('refund')" class="text-gray-400 hover:text-white transition text-left">退款政策 (Refund)</button></li>
+                        <li><button onclick="openInfoModal('about')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_about">关于我们</button></li>
+                        <li><button onclick="openInfoModal('delivery')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_delivery">发货政策 (Delivery)</button></li>
+                        <li><button onclick="openInfoModal('refund')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_refund">退款政策 (Refund)</button></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold mb-6 text-white">信息</h4>
+                    <h4 class="text-lg font-bold mb-6 text-white" data-i18n="footer_info">信息</h4>
                     <ul class="space-y-3">
-                        <li><button onclick="openInfoModal('contact')" class="text-gray-400 hover:text-white transition text-left">联系我们</button></li>
-                        <li><button onclick="openInfoModal('affiliate')" class="text-gray-400 hover:text-white transition text-left">联盟计划</button></li>
+                        <li><button onclick="openInfoModal('contact')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_contact">联系我们</button></li>
+                        <li><button onclick="openInfoModal('affiliate')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_affiliate">联盟计划</button></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold mb-6 text-white">法律条款</h4>
+                    <h4 class="text-lg font-bold mb-6 text-white" data-i18n="footer_legal">法律条款</h4>
                     <ul class="space-y-3">
-                        <li><button onclick="openInfoModal('privacy')" class="text-gray-400 hover:text-white transition text-left">隐私政策 (Privacy)</button></li>
-                        <li><button onclick="openInfoModal('terms')" class="text-gray-400 hover:text-white transition text-left">服务条款 (Terms)</button></li>
+                        <li><button onclick="openInfoModal('privacy')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_privacy">隐私政策 (Privacy)</button></li>
+                        <li><button onclick="openInfoModal('terms')" class="text-gray-400 hover:text-white transition text-left" data-i18n="footer_terms">服务条款 (Terms)</button></li>
                     </ul>
                 </div>
             </div>
-
+            
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="flex space-x-6">
-                    <a href="javascript:void(0)" onclick="alert('社交媒体账号正在建设中...')" class="text-gray-400 hover:text-white text-2xl transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-                    <a href="javascript:void(0)" onclick="alert('社交媒体账号正在建设中...')" class="text-gray-400 hover:text-white text-2xl transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                    <a href="javascript:void(0)" onclick="alert('社交媒体账号正在建设中...')" class="text-gray-400 hover:text-white text-2xl transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                </div>
-                <div class="flex gap-4">
-                    <button class="bg-black border border-gray-600 rounded-lg px-3 py-1 flex items-center gap-2 hover:bg-gray-800 transition">
-                        <svg class="w-6 h-6 fill-white" viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg>
-                        <div class="text-left"><div class="text-[10px] leading-none text-gray-400">Download on the</div><div class="text-sm font-bold leading-tight">App Store</div></div>
-                    </button>
-                    <button class="bg-black border border-gray-600 rounded-lg px-3 py-1 flex items-center gap-2 hover:bg-gray-800 transition">
-                        <svg class="w-6 h-6 fill-white" viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
-                        <div class="text-left"><div class="text-[10px] leading-none text-gray-400">GET IT ON</div><div class="text-sm font-bold leading-tight">Google Play</div></div>
-                    </button>
-                </div>
+                 <div class="flex space-x-6">
+                    <a href="javascript:void(0)" onclick="alert('Coming soon...')" class="text-gray-400 hover:text-white text-2xl transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                    <a href="javascript:void(0)" onclick="alert('Coming soon...')" class="text-gray-400 hover:text-white text-2xl transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                 </div>
+                 <div class="mt-2 text-center text-xs text-gray-500">&copy; 2024 GlobalConnect Inc. All rights reserved.</div>
             </div>
-            <div class="mt-8 text-center text-xs text-gray-500">&copy; 2024 GlobalConnect Inc. All rights reserved.</div>
         </div>
     </footer>
 
@@ -207,7 +199,7 @@
                             <img id="modal-flag" src="" class="w-12 h-12 rounded-full shadow-sm object-cover bg-white">
                             <div>
                                 <h3 class="text-2xl font-bold leading-6 text-gray-900" id="modal-title">--</h3>
-                                <p class="text-sm text-gray-500 mt-1">网络: <span id="modal-networks" class="font-medium text-blue-600">--</span></p>
+                                <p class="text-sm text-gray-500 mt-1"><span data-i18n="modal_network">网络</span>: <span id="modal-networks" class="font-medium text-blue-600">--</span></p>
                             </div>
                         </div>
                         <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none" onclick="closeModal()">
@@ -217,25 +209,25 @@
 
                     <div class="px-4 py-6 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div class="lg:col-span-2">
-                            <h4 class="text-lg font-bold text-gray-900 mb-4">选择流量包</h4>
+                            <h4 class="text-lg font-bold text-gray-900 mb-4" data-i18n="modal_select_plan">选择流量包</h4>
                             <div id="plans-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto modal-scroll pr-2">
                             </div>
                         </div>
 
                         <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 h-fit flex flex-col justify-between">
                             <div>
-                                <h4 class="text-lg font-bold text-gray-900 mb-4">订单摘要</h4>
+                                <h4 class="text-lg font-bold text-gray-900 mb-4" data-i18n="modal_summary">订单摘要</h4>
                                 <div class="space-y-4 mb-6">
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-500">所选套餐</span>
-                                        <span class="font-medium text-gray-900" id="summary-plan">未选择</span>
+                                        <span class="text-gray-500" data-i18n="modal_selected">所选套餐</span>
+                                        <span class="font-medium text-gray-900" id="summary-plan" data-i18n="modal_unselected">未选择</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-500">有效期</span>
+                                        <span class="text-gray-500" data-i18n="modal_validity">有效期</span>
                                         <span class="font-medium text-gray-900" id="summary-validity">--</span>
                                     </div>
                                     <div class="border-t border-gray-200 pt-4 flex justify-between items-center">
-                                        <span class="text-base font-bold text-gray-900">应付金额</span>
+                                        <span class="text-base font-bold text-gray-900" data-i18n="modal_total">应付金额</span>
                                         <span class="text-3xl font-bold text-blue-600" id="summary-price">€0.00</span>
                                     </div>
                                 </div>
@@ -243,10 +235,10 @@
 
                             <button id="buy-btn" onclick="buyDirectly()" disabled 
                                     class="w-full bg-blue-600 text-white py-4 px-4 rounded-xl font-bold text-lg shadow-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2">
-                                请选择套餐
+                                <span data-i18n="btn_select_plan">请选择套餐</span>
                             </button>
                             
-                            <p class="text-xs text-center text-gray-400 mt-3">🔒 Stripe 安全加密支付</p>
+                            <p class="text-xs text-center text-gray-400 mt-3">🔒 Stripe Secured Payment</p>
                         </div>
                     </div>
                 </div>
@@ -270,61 +262,202 @@
                             </div>
                     </div>
                     <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 text-right">
-                        <button class="bg-gray-900 text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-gray-700 transition" onclick="closeInfoModal()">关闭</button>
+                        <button class="bg-gray-900 text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-gray-700 transition" onclick="closeInfoModal()" data-i18n="btn_close">关闭</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <script>
         // ============================================
-        // 数据配置
+        // 国际化 (i18n) 数据
         // ============================================
-        const LINK_1  = "https://buy.stripe.com/7sY8wRfFdeGVgJx7iV14406";
-        const LINK_5  = "https://buy.stripe.com/7sY4gB64D8ixdxl32F14407";
-        const LINK_10 = "https://buy.stripe.com/14A3cxfFdaqF78X0Ux14408";
-        const LINK_20 = "https://buy.stripe.com/00w00leB956l2SH32F14409";
-        const LINK_50 = "https://buy.stripe.com/dRm00l8cLgP3eBp8mZ1440a";
+        let currentLang = 'zh';
 
+        const translations = {
+            zh: {
+                nav_dest: "热门目的地",
+                nav_help: "使用教程",
+                nav_cost: "资费对比",
+                hero_badge: "🚀 全球 eSIM 流量超市",
+                hero_title_1: "连接世界，",
+                hero_title_2: "无缝漫游",
+                hero_desc: "告别高昂漫游费。€1 起购，即买即用，覆盖全球 190+ 国家和地区。",
+                search_placeholder: "输入国家 (例如: 泰国, 英国...)",
+                btn_search: "搜索",
+                sec_dest_title: "🔥 热门目的地",
+                sec_dest_sub: "覆盖全球 190+ 国家，点击选择套餐",
+                filter_all: "全部",
+                filter_asia: "亚洲",
+                filter_europe: "欧洲",
+                filter_americas: "美洲",
+                filter_other: "其他",
+                no_results: "未找到相关目的地",
+                btn_view_plans: "查看详细套餐",
+                sold_text: "人已选购",
+                sec_step_title: "📱 3步轻松激活",
+                sec_step_sub: "无需插卡，扫描二维码即可连接全球网络",
+                step_1_title: "在线下单",
+                step_1_desc: "选择目的地和流量包，完成支付。系统将在 1 分钟内自动发送 eSIM 二维码。",
+                step_2_title: "扫码安装",
+                step_2_desc: "打开手机设置 -> 蜂窝网络 -> 添加 eSIM。扫描邮件中的二维码即可。",
+                step_3_title: "落地即连",
+                step_3_desc: "到达目的地后，开启“数据漫游”，手机将自动连接当地最佳网络。",
+                sec_why_title: "为什么选择 GlobalConnect?",
+                sec_why_sub: "不仅便宜，更稳定。",
+                chart_cost_title: "💰 资费对比 (7天/3GB)",
+                chart_speed_title: "⚡ 4G/5G 覆盖指数",
+                footer_support: "支持",
+                footer_shop: "店铺",
+                footer_info: "信息",
+                footer_legal: "法律条款",
+                footer_faq: "常见问题 FAQ",
+                footer_setup: "如何设置 eSIM",
+                footer_about: "关于我们",
+                footer_delivery: "发货政策 (Delivery)",
+                footer_refund: "退款政策 (Refund)",
+                footer_contact: "联系我们",
+                footer_affiliate: "联盟计划",
+                footer_privacy: "隐私政策 (Privacy)",
+                footer_terms: "服务条款 (Terms)",
+                modal_network: "网络",
+                modal_select_plan: "选择流量包",
+                modal_summary: "订单摘要",
+                modal_selected: "所选套餐",
+                modal_unselected: "未选择",
+                modal_validity: "有效期",
+                modal_total: "应付金额",
+                btn_select_plan: "请选择套餐",
+                btn_pay_prefix: "立即支付",
+                btn_close: "关闭",
+                day: "天",
+                days: "天"
+            },
+            en: {
+                nav_dest: "Destinations",
+                nav_help: "How it Works",
+                nav_cost: "Pricing",
+                hero_badge: "🚀 Global eSIM Marketplace",
+                hero_title_1: "Connect World, ",
+                hero_title_2: "Seamlessly",
+                hero_desc: "Say goodbye to roaming fees. Starts from €1. Global coverage in 190+ countries.",
+                search_placeholder: "Enter country (e.g., Thailand, UK...)",
+                btn_search: "Search",
+                sec_dest_title: "🔥 Top Destinations",
+                sec_dest_sub: "Coverage in 190+ countries. Click to choose plan.",
+                filter_all: "All",
+                filter_asia: "Asia",
+                filter_europe: "Europe",
+                filter_americas: "Americas",
+                filter_other: "Other",
+                no_results: "No destinations found",
+                btn_view_plans: "View Plans",
+                sold_text: "Sold",
+                sec_step_title: "📱 Easy Activation",
+                sec_step_sub: "No SIM card needed. Just scan QR code.",
+                step_1_title: "Order Online",
+                step_1_desc: "Select destination and plan. Receive QR code via email instantly.",
+                step_2_title: "Scan QR",
+                step_2_desc: "Settings -> Cellular -> Add eSIM. Scan the code from email.",
+                step_3_title: "Connect",
+                step_3_desc: "Turn on 'Data Roaming' upon arrival. Connect automatically.",
+                sec_why_title: "Why GlobalConnect?",
+                sec_why_sub: "Cheaper, faster, stable.",
+                chart_cost_title: "💰 Cost Comparison (7 Days/3GB)",
+                chart_speed_title: "⚡ 4G/5G Coverage Index",
+                footer_support: "Support",
+                footer_shop: "Shop",
+                footer_info: "Info",
+                footer_legal: "Legal",
+                footer_faq: "FAQ",
+                footer_setup: "Setup Guide",
+                footer_about: "About Us",
+                footer_delivery: "Delivery Policy",
+                footer_refund: "Refund Policy",
+                footer_contact: "Contact Us",
+                footer_affiliate: "Affiliate Program",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service",
+                modal_network: "Network",
+                modal_select_plan: "Select Plan",
+                modal_summary: "Order Summary",
+                modal_selected: "Plan",
+                modal_unselected: "Not Selected",
+                modal_validity: "Validity",
+                modal_total: "Total",
+                btn_select_plan: "Select a Plan",
+                btn_pay_prefix: "Pay Now",
+                btn_close: "Close",
+                day: "Day",
+                days: "Days"
+            }
+        };
+
+        // ============================================
+        // 数据配置 (套餐与产品)
+        // ============================================
+        const LINK_1  = "https://buy.stripe.com/00wbJ30KjaqF1ODav71440l";
+        const LINK_3  = "https://buy.stripe.com/28E8wRakT6apcth0Ux1440m";
+        const LINK_5  = "https://buy.stripe.com/00w9AV0Kj7etbpd6eR1440n";
+        const LINK_15 = "https://buy.stripe.com/4gM8wR2SrfKZ1OD1YB1440o";
+        const LINK_25 = "https://buy.stripe.com/8x214pboX9mBdxleLn1440p";
+        const LINK_50 = "https://buy.stripe.com/cNidRbeB97et0KzfPr1440q";
+
+        // 更新后的套餐结构 (1, 3, 5, 15, 25, 50 欧元)
         const commonPlans = [
-            { id: '1', name: '体验包', validity: '1 天',  price: 1.00,  data: '300MB', stripeLink: LINK_1 },
-            { id: '5', name: '短途包', validity: '3 天',  price: 5.00,  data: '1GB',   stripeLink: LINK_5 },
-            { id: '10', name: '标准周卡', validity: '7 天',  price: 10.00, data: '3GB',   stripeLink: LINK_10 },
-            { id: '20', name: '深度游', validity: '15 天', price: 20.00, data: '10GB',  stripeLink: LINK_20 },
-            { id: '50', name: '商务包', validity: '30 天', price: 50.00, data: '25GB',  stripeLink: LINK_50 }
+            { id: '1',  name: {zh: '体验包', en: 'Trial'},     days: 1,  price: 1.00,  data: '300MB', stripeLink: LINK_1 },
+            { id: '3',  name: {zh: '短途包', en: 'Lite'},      days: 3,  price: 3.00,  data: '1GB',   stripeLink: LINK_3 },
+            { id: '5',  name: {zh: '基础包', en: 'Basic'},     days: 5,  price: 5.00,  data: '2GB',   stripeLink: LINK_5 }, 
+            { id: '15', name: {zh: '假日包', en: 'Holiday'},   days: 15, price: 15.00, data: '10GB',  stripeLink: LINK_15 },
+            { id: '25', name: {zh: '月度包', en: 'Monthly'},   days: 30, price: 25.00, data: '20GB',  stripeLink: LINK_25 },
+            { id: '50', name: {zh: '商务包', en: 'Ultra'},     days: 30, price: 50.00, data: '30GB',  stripeLink: LINK_50 } 
         ];
 
-        const products = [
-            { id: 'jp', name: '日本 Japan', region: 'asia', flag: 'https://flagcdn.com/jp.svg', networks: 'Softbank / Docomo', rating: 4.9, sold: '50k+' },
-            { id: 'kr', name: '韩国 Korea', region: 'asia', flag: 'https://flagcdn.com/kr.svg', networks: 'SK Telecom', rating: 4.8, sold: '32k+' },
-            { id: 'th', name: '泰国 Thailand', region: 'asia', flag: 'https://flagcdn.com/th.svg', networks: 'AIS / TrueMove', rating: 4.9, sold: '40k+' },
-            { id: 'vn', name: '越南 Vietnam', region: 'asia', flag: 'https://flagcdn.com/vn.svg', networks: 'Viettel', rating: 4.7, sold: '15k+' },
-            { id: 'id', name: '印尼 Indonesia', region: 'asia', flag: 'https://flagcdn.com/id.svg', networks: 'Telkomsel', rating: 4.6, sold: '20k+' },
-            { id: 'eu', name: '欧洲 Europe', region: 'europe', flag: 'https://flagcdn.com/eu.svg', networks: 'Vodafone / Orange', rating: 4.9, sold: '80k+' },
-            { id: 'uk', name: '英国 UK', region: 'europe', flag: 'https://flagcdn.com/gb.svg', networks: 'EE / O2', rating: 4.8, sold: '25k+' },
-            { id: 'fr', name: '法国 France', region: 'europe', flag: 'https://flagcdn.com/fr.svg', networks: 'Orange', rating: 4.8, sold: '22k+' },
-            { id: 'es', name: '西班牙 Spain', region: 'europe', flag: 'https://flagcdn.com/es.svg', networks: 'Movistar', rating: 4.7, sold: '18k+' },
-            { id: 'tr', name: '土耳其 Turkey', region: 'europe', flag: 'https://flagcdn.com/tr.svg', networks: 'Turkcell', rating: 4.7, sold: '12k+' },
-            { id: 'us', name: '美国 USA', region: 'americas', flag: 'https://flagcdn.com/us.svg', networks: 'AT&T / T-Mobile', rating: 4.7, sold: '45k+' },
-            { id: 'au', name: '澳大利亚 Australia', region: 'other', flag: 'https://flagcdn.com/au.svg', networks: 'Telstra', rating: 4.8, sold: '10k+' },
-            { id: 'ae', name: '阿联酋 UAE', region: 'asia', flag: 'https://flagcdn.com/ae.svg', networks: 'Etisalat', rating: 4.9, sold: '8k+' },
-            { id: 'za', name: '南非 South Africa', region: 'other', flag: 'https://flagcdn.com/za.svg', networks: 'Vodacom', rating: 4.5, sold: '5k+' },
-        ].map(p => ({ ...p, plans: commonPlans.map(plan => ({...plan, id: p.id + '-' + plan.id})) }));
+        // 产品数据增加双语名称
+        const productsRaw = [
+            { id: 'jp', name: {zh: '日本', en: 'Japan'}, region: 'asia', flag: 'https://flagcdn.com/jp.svg', networks: 'Softbank / Docomo', rating: 4.9, sold: '50k+' },
+            { id: 'kr', name: {zh: '韩国', en: 'Korea'}, region: 'asia', flag: 'https://flagcdn.com/kr.svg', networks: 'SK Telecom', rating: 4.8, sold: '32k+' },
+            { id: 'th', name: {zh: '泰国', en: 'Thailand'}, region: 'asia', flag: 'https://flagcdn.com/th.svg', networks: 'AIS / TrueMove', rating: 4.9, sold: '40k+' },
+            { id: 'vn', name: {zh: '越南', en: 'Vietnam'}, region: 'asia', flag: 'https://flagcdn.com/vn.svg', networks: 'Viettel', rating: 4.7, sold: '15k+' },
+            { id: 'id', name: {zh: '印尼', en: 'Indonesia'}, region: 'asia', flag: 'https://flagcdn.com/id.svg', networks: 'Telkomsel', rating: 4.6, sold: '20k+' },
+            { id: 'eu', name: {zh: '欧洲', en: 'Europe'}, region: 'europe', flag: 'https://flagcdn.com/eu.svg', networks: 'Vodafone / Orange', rating: 4.9, sold: '80k+' },
+            { id: 'uk', name: {zh: '英国', en: 'UK'}, region: 'europe', flag: 'https://flagcdn.com/gb.svg', networks: 'EE / O2', rating: 4.8, sold: '25k+' },
+            { id: 'fr', name: {zh: '法国', en: 'France'}, region: 'europe', flag: 'https://flagcdn.com/fr.svg', networks: 'Orange', rating: 4.8, sold: '22k+' },
+            { id: 'es', name: {zh: '西班牙', en: 'Spain'}, region: 'europe', flag: 'https://flagcdn.com/es.svg', networks: 'Movistar', rating: 4.7, sold: '18k+' },
+            { id: 'tr', name: {zh: '土耳其', en: 'Turkey'}, region: 'europe', flag: 'https://flagcdn.com/tr.svg', networks: 'Turkcell', rating: 4.7, sold: '12k+' },
+            { id: 'us', name: {zh: '美国', en: 'USA'}, region: 'americas', flag: 'https://flagcdn.com/us.svg', networks: 'AT&T / T-Mobile', rating: 4.7, sold: '45k+' },
+            { id: 'au', name: {zh: '澳大利亚', en: 'Australia'}, region: 'other', flag: 'https://flagcdn.com/au.svg', networks: 'Telstra', rating: 4.8, sold: '10k+' },
+            { id: 'ae', name: {zh: '阿联酋', en: 'UAE'}, region: 'asia', flag: 'https://flagcdn.com/ae.svg', networks: 'Etisalat', rating: 4.9, sold: '8k+' },
+            { id: 'za', name: {zh: '南非', en: 'South Africa'}, region: 'other', flag: 'https://flagcdn.com/za.svg', networks: 'Vodacom', rating: 4.5, sold: '5k+' },
+        ];
 
-        // ----------------------------------------------------
-        // 底部法律条款内容库 (供弹窗使用)
-        // ----------------------------------------------------
+        let products = productsRaw.map(p => ({ ...p, plans: commonPlans }));
+
+        // 底部内容库 (i18n 处理)
         const infoContent = {
-            'about': "GlobalConnect Inc. 致力于为全球旅行者提供最便捷、最实惠的 eSIM 数据服务。\n\n我们成立于 2024 年，总部位于新加坡，旨在通过技术消除国际漫游费。目前，我们的服务覆盖全球 190 多个国家和地区，已为超过 10 万名用户提供服务。\n\n我们的使命是让连接变得简单，无论您身在何处。",
-            'privacy': "我们非常重视您的隐私。\n\n1. 数据收集：我们仅收集处理订单所需的必要信息（如电子邮件地址）。\n2. 支付安全：所有支付均由 Stripe 安全处理，我们不会接触或存储您的信用卡信息。\n3. 数据使用：您的数据仅用于 eSIM 发货和客户服务，绝不会出售给第三方。\n\n如果您要求删除您的数据，请联系 qiaozhi9711@gmail.com。",
-            'terms': "使用本网站即表示您同意以下条款：\n\n1. 服务性质：我们要销售的是数字 eSIM 产品，非实体卡。\n2. 设备兼容性：购买前，用户有责任确认其手机支持 eSIM 功能。\n3. 严禁转售：未经授权，禁止转售我们的二维码。\n4. 免责声明：网络信号受当地运营商基站覆盖影响，我们在特定死角无法保证 100% 信号。",
-            'refund': "我们的退款保障政策：\n\n1. 100% 全额退款：如果 eSIM 因技术原因无法在您的设备上激活，我们将全额退款。\n2. 申请时效：请在购买后 30 天内联系我们。\n3. 不可退款情况：如果您购买后发现手机不支持 eSIM，或者已经激活并使用了数据流量，通常不予退款。\n\n退款处理时间通常为 3-5 个工作日。",
-            'delivery': "发货政策 (Digital Delivery)：\n\n1. 发货方式：电子邮件发送二维码 (QR Code)。\n2. 发货时间：支付成功后，系统会自动发送邮件，通常在 1-2 分钟内到达。\n3. 未收到邮件：请检查垃圾邮件箱 (Spam)。如果 10 分钟后仍未收到，请联系客服。",
-            'contact': "联系我们：\n\n客户支持邮箱: qiaozhi9711@gmail.com\n工作时间: 24/7 全天候支持\n\n如果您遇到连接问题，请在邮件中附上订单号和手机型号，以便我们快速为您解决。",
-            'help': "常见问题 (FAQ)：\n\nQ: 我需要插卡吗？\nA: 不需要，eSIM 是虚拟卡，扫码即可用。\n\nQ: 可以保留原来的号码吗？\nA: 可以，您可以同时使用原号接打电话，用 eSIM 上网。\n\nQ: 到达目的地前可以激活吗？\nA: 建议在出发当天或到达后激活。",
-            'setup': "设置教程：\n\n1. iOS: 设置 > 蜂窝网络 > 添加 eSIM > 扫描二维码。\n2. Android: 设置 > 网络和互联网 > SIM 卡 > 添加 > 扫描二维码。\n\n注意：激活时需要连接 WiFi 网络。",
-            'affiliate': "加入我们的联盟计划：\n\n如果您是旅游博主或网站管理员，欢迎推广我们的 eSIM。\n请发送邮件至 qiaozhi9711@gmail.com 获取详细佣金方案。"
+            zh: {
+                'about': "GlobalConnect Inc. 致力于为全球旅行者提供最便捷、最实惠的 eSIM 数据服务。\n\n我们成立于 2024 年，总部位于新加坡，旨在通过技术消除国际漫游费。目前，我们的服务覆盖全球 190 多个国家和地区，已为超过 10 万名用户提供服务。\n\n我们的使命是让连接变得简单，无论您身在何处。",
+                'privacy': "我们非常重视您的隐私。\n\n1. 数据收集：我们仅收集处理订单所需的必要信息（如电子邮件地址）。\n2. 支付安全：所有支付均由 Stripe 安全处理，我们不会接触或存储您的信用卡信息。\n3. 数据使用：您的数据仅用于 eSIM 发货和客户服务，绝不会出售给第三方。\n\n如果您要求删除您的数据，请联系 qiaozhi9711@gmail.com。",
+                'terms': "使用本网站即表示您同意以下条款：\n\n1. 服务性质：我们要销售的是数字 eSIM 产品，非实体卡。\n2. 设备兼容性：购买前，用户有责任确认其手机支持 eSIM 功能。\n3. 严禁转售：未经授权，禁止转售我们的二维码。\n4. 免责声明：网络信号受当地运营商基站覆盖影响，我们在特定死角无法保证 100% 信号。",
+                'refund': "我们的退款保障政策：\n\n1. 100% 全额退款：如果 eSIM 因技术原因无法在您的设备上激活，我们将全额退款。\n2. 申请时效：请在购买后 30 天内联系我们。\n3. 不可退款情况：如果您购买后发现手机不支持 eSIM，或者已经激活并使用了数据流量，通常不予退款。\n\n退款处理时间通常为 3-5 个工作日。",
+                'delivery': "发货政策 (Digital Delivery)：\n\n1. 发货方式：电子邮件发送二维码 (QR Code)。\n2. 发货时间：支付成功后，系统会自动发送邮件，通常在 1-2 分钟内到达。\n3. 未收到邮件：请检查垃圾邮件箱 (Spam)。如果 10 分钟后仍未收到，请联系客服。",
+                'contact': "联系我们：\n\n客户支持邮箱: qiaozhi9711@gmail.com\n工作时间: 24/7 全天候支持\n\n如果您遇到连接问题，请在邮件中附上订单号和手机型号，以便我们快速为您解决。",
+                'help': "常见问题 (FAQ)：\n\nQ: 我需要插卡吗？\nA: 不需要，eSIM 是虚拟卡，扫码即可用。\n\nQ: 可以保留原来的号码吗？\nA: 可以，您可以同时使用原号接打电话，用 eSIM 上网。\n\nQ: 到达目的地前可以激活吗？\nA: 建议在出发当天或到达后激活。",
+                'setup': "设置教程：\n\n1. iOS: 设置 > 蜂窝网络 > 添加 eSIM > 扫描二维码。\n2. Android: 设置 > 网络和互联网 > SIM 卡 > 添加 > 扫描二维码。\n\n注意：激活时需要连接 WiFi 网络。",
+                'affiliate': "加入我们的联盟计划：\n\n如果您是旅游博主或网站管理员，欢迎推广我们的 eSIM。\n请发送邮件至 qiaozhi9711@gmail.com 获取详细佣金方案。"
+            },
+            en: {
+                'about': "GlobalConnect Inc. is dedicated to providing the most convenient and affordable eSIM data services for global travelers.\n\nFounded in 2024 and headquartered in Singapore, we aim to eliminate roaming charges through technology. Currently, our services cover over 190 countries and regions worldwide, serving over 100,000 users.\n\nOur mission is to make connection simple, wherever you are.",
+                'privacy': "We value your privacy.\n\n1. Data Collection: We only collect necessary information for order processing (e.g., email).\n2. Payment Security: All payments are securely processed by Stripe; we do not access or store your credit card information.\n3. Data Usage: Your data is only used for eSIM delivery and customer service and will never be sold to third parties.",
+                'terms': "By using this site, you agree to the following:\n\n1. Service Nature: We sell digital eSIM products, not physical cards.\n2. Device Compatibility: It is the user's responsibility to ensure their phone supports eSIM before purchase.\n3. Resale Prohibited: Unauthorized resale of our QR codes is prohibited.",
+                'refund': "Refund Policy:\n\n1. 100% Refund: If the eSIM cannot be activated due to technical reasons, we will refund fully.\n2. Timeline: Please contact us within 30 days of purchase.\n3. Non-refundable: Purchases made for incompatible phones or if data has already been used are generally non-refundable.",
+                'delivery': "Delivery Policy:\n\n1. Method: Email delivery of QR Code.\n2. Time: Automatic email delivery within 1-2 minutes after payment.\n3. Not Received: Check your Spam folder. If not received after 10 minutes, please contact support.",
+                'contact': "Contact Us:\n\nSupport Email: qiaozhi9711@gmail.com\nHours: 24/7 Support\n\nPlease include your order number and phone model for faster resolution.",
+                'help': "FAQ:\n\nQ: Do I need to insert a card?\nA: No, eSIM is virtual. Just scan to use.\n\nQ: Can I keep my original number?\nA: Yes, you can use your original number for calls/texts while using eSIM for data.\n\nQ: Can I activate before arrival?\nA: We recommend activating on the day of departure or upon arrival.",
+                'setup': "Setup Guide:\n\n1. iOS: Settings > Cellular > Add eSIM > Scan QR.\n2. Android: Settings > Network & Internet > SIMs > Add > Scan QR.\n\nNote: WiFi connection is required during activation.",
+                'affiliate': "Affiliate Program:\n\nIf you are a travel blogger or webmaster, welcome to promote our eSIM.\nEmail qiaozhi9711@gmail.com for commission details."
+            }
         };
 
         // ----------------------------------------------------
@@ -333,18 +466,50 @@
         let selectedPlan = null;
 
         document.addEventListener('DOMContentLoaded', () => {
+            updatePageLanguage();
             renderProducts();
             initCharts();
         });
 
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            updatePageLanguage();
+            renderProducts(lastFilter, lastSearch); 
+            if(!document.getElementById('product-modal').classList.contains('hidden')){
+                closeModal();
+            }
+        }
+
+        function updatePageLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.textContent = translations[currentLang][key];
+                }
+            });
+            document.getElementById('destination-search').placeholder = translations[currentLang]['search_placeholder'];
+            document.getElementById('lang-text').textContent = currentLang === 'zh' ? 'EN' : '中文';
+            document.getElementById('lang-icon').textContent = currentLang === 'zh' ? '🌐' : '🇨🇳';
+        }
+
+        let lastFilter = 'all';
+        let lastSearch = '';
+
         function renderProducts(filter = 'all', searchTerm = '') {
+            lastFilter = filter;
+            lastSearch = searchTerm;
+            
             const grid = document.getElementById('product-grid');
             const noResults = document.getElementById('no-results');
             grid.innerHTML = '';
+            
+            const t = translations[currentLang];
+            
             const filtered = products.filter(p => {
                 const matchesCategory = filter === 'all' || p.region === filter || (filter === 'other' && p.region === 'other');
-                const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
-                return matchesCategory && matchesSearch;
+                const nameMatch = p.name.zh.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                  p.name.en.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesCategory && nameMatch;
             });
 
             if (filtered.length === 0) {
@@ -352,6 +517,7 @@
             } else {
                 noResults.classList.add('hidden');
                 filtered.forEach(p => {
+                    const displayName = currentLang === 'zh' ? `${p.name.zh} ${p.name.en}` : p.name.en;
                     const card = document.createElement('div');
                     card.className = 'bg-white rounded-2xl p-5 cursor-pointer transition duration-300 border border-gray-100 hover:shadow-xl hover:border-blue-100 flex flex-col justify-between group h-full';
                     card.onclick = () => openModal(p.id);
@@ -359,40 +525,57 @@
                         <div>
                             <div class="flex justify-between items-start mb-4">
                                 <div class="w-16 h-16 rounded-full bg-gray-50 border border-gray-100 shadow-sm overflow-hidden group-hover:scale-110 transition duration-300">
-                                    <img src="${p.flag}" alt="${p.name}" class="w-full h-full object-cover">
+                                    <img src="${p.flag}" alt="${displayName}" class="w-full h-full object-cover">
                                 </div>
                             </div>
-                            <h3 class="font-bold text-xl text-gray-900 mb-1 group-hover:text-blue-600 transition">${p.name}</h3>
+                            <h3 class="font-bold text-xl text-gray-900 mb-1 group-hover:text-blue-600 transition">${displayName}</h3>
                             <div class="flex items-center gap-3 text-sm text-gray-400 mb-6">
                                 <div class="flex items-center text-yellow-400"><span>★</span><span class="text-gray-600 font-medium ml-1">${p.rating}</span></div>
-                                <span class="w-1 h-1 bg-gray-300 rounded-full"></span><span>${p.sold} 人已选购</span>
+                                <span class="w-1 h-1 bg-gray-300 rounded-full"></span><span>${p.sold} ${t.sold_text}</span>
                             </div>
                         </div>
-                        <div class="mt-2"><button class="w-full bg-gray-50 text-blue-600 font-bold py-3 px-4 rounded-xl transition duration-300 group-hover:bg-blue-600 group-hover:text-white flex justify-center items-center"><span class="text-sm">查看详细套餐</span></button></div>
+                        <div class="mt-2"><button class="w-full bg-gray-50 text-blue-600 font-bold py-3 px-4 rounded-xl transition duration-300 group-hover:bg-blue-600 group-hover:text-white flex justify-center items-center"><span class="text-sm">${t.btn_view_plans}</span></button></div>
                     `;
                     grid.appendChild(card);
                 });
             }
         }
 
-        function filterCategory(c) { renderProducts(c); }
-        function filterDestinations() { renderProducts('all', document.getElementById('destination-search').value); }
+        function filterCategory(c) { renderProducts(c, lastSearch); }
+        function filterDestinations() { renderProducts(lastFilter, document.getElementById('destination-search').value); }
 
         function openModal(pid) {
             const product = products.find(p => p.id === pid);
             if (!product) return;
             selectedPlan = null;
             updateSummary();
+            
+            const t = translations[currentLang];
+            const displayName = currentLang === 'zh' ? `${product.name.zh} ${product.name.en}` : product.name.en;
+
             document.getElementById('modal-flag').src = product.flag;
-            document.getElementById('modal-title').textContent = product.name;
+            document.getElementById('modal-title').textContent = displayName;
             document.getElementById('modal-networks').textContent = product.networks;
+            
             const container = document.getElementById('plans-container');
             container.innerHTML = '';
+            
             product.plans.forEach(plan => {
+                const planName = plan.name[currentLang];
+                const dayLabel = plan.days > 1 ? t.days : t.day;
+                const validityStr = `${plan.days} ${dayLabel}`;
+
                 const div = document.createElement('div');
                 div.className = 'border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition flex justify-between items-center group';
-                div.onclick = () => selectPlan(plan, div);
-                div.innerHTML = `<div><div class="font-bold text-gray-900 text-lg group-hover:text-blue-700">${plan.data}</div><div class="text-xs text-gray-500 mt-1">${plan.name} · ${plan.validity}</div></div><div class="text-blue-600 font-bold text-xl">€${plan.price.toFixed(0)}</div>`;
+                div.onclick = () => selectPlan({...plan, displayName: planName, displayValidity: validityStr}, div);
+                
+                div.innerHTML = `
+                    <div>
+                        <div class="font-bold text-gray-900 text-lg group-hover:text-blue-700">${plan.data}</div>
+                        <div class="text-xs text-gray-500 mt-1">${planName} · ${validityStr}</div>
+                    </div>
+                    <div class="text-blue-600 font-bold text-xl">€${plan.price.toFixed(0)}</div>
+                `;
                 container.appendChild(div);
             });
             document.getElementById('product-modal').classList.remove('hidden');
@@ -409,38 +592,52 @@
 
         function updateSummary() {
             const btn = document.getElementById('buy-btn');
+            const t = translations[currentLang];
+
             if (selectedPlan) {
-                document.getElementById('summary-plan').textContent = selectedPlan.data + " (" + selectedPlan.name + ")";
-                document.getElementById('summary-validity').textContent = selectedPlan.validity;
+                document.getElementById('summary-plan').textContent = `${selectedPlan.data} (${selectedPlan.displayName})`;
+                document.getElementById('summary-validity').textContent = selectedPlan.displayValidity;
                 document.getElementById('summary-price').textContent = `€${selectedPlan.price.toFixed(2)}`;
                 btn.disabled = false;
-                btn.innerHTML = `立即支付 €${selectedPlan.price.toFixed(2)}`;
+                btn.innerHTML = `${t.btn_pay_prefix} €${selectedPlan.price.toFixed(2)}`;
             } else {
-                document.getElementById('summary-plan').textContent = '未选择';
+                document.getElementById('summary-plan').textContent = t.modal_unselected;
                 document.getElementById('summary-validity').textContent = '--';
                 document.getElementById('summary-price').textContent = '€0.00';
                 btn.disabled = true;
-                btn.innerHTML = '请选择套餐';
+                btn.innerHTML = t.btn_select_plan;
             }
         }
 
         function buyDirectly() {
-            if (!selectedPlan || !selectedPlan.stripeLink) { alert("配置错误：该套餐未绑定支付链接"); return; }
+            if (!selectedPlan || !selectedPlan.stripeLink) { 
+                alert(currentLang === 'zh' ? "配置错误：该套餐未绑定支付链接" : "Configuration Error: No payment link."); 
+                return; 
+            }
+            if (selectedPlan.stripeLink === "#") {
+                 alert(currentLang === 'zh' ? "演示模式：暂无支付链接。" : "Demo Mode: No payment link yet.");
+                 return;
+            }
             const btn = document.getElementById('buy-btn');
             btn.disabled = true;
-            btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> 正在跳转...`;
+            btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> ${currentLang === 'zh' ? '正在跳转...' : 'Redirecting...'}`;
             setTimeout(() => { window.location.href = selectedPlan.stripeLink; }, 800);
         }
 
-        // --- 信息弹窗逻辑 ---
         function openInfoModal(key) {
-            const content = infoContent[key];
+            const content = infoContent[currentLang][key];
             const titles = {
-                'about': '关于我们', 'privacy': '隐私政策', 'terms': '服务条款', 'refund': '退款政策',
-                'delivery': '发货政策', 'contact': '联系我们', 'help': '常见问题', 'setup': '设置教程', 'affiliate': '联盟计划'
+                zh: {
+                    'about': '关于我们', 'privacy': '隐私政策', 'terms': '服务条款', 'refund': '退款政策',
+                    'delivery': '发货政策', 'contact': '联系我们', 'help': '常见问题', 'setup': '设置教程', 'affiliate': '联盟计划'
+                },
+                en: {
+                    'about': 'About Us', 'privacy': 'Privacy Policy', 'terms': 'Terms of Service', 'refund': 'Refund Policy',
+                    'delivery': 'Delivery Policy', 'contact': 'Contact Us', 'help': 'FAQ', 'setup': 'Setup Guide', 'affiliate': 'Affiliate Program'
+                }
             };
             if(content) {
-                document.getElementById('info-title').textContent = titles[key] || '信息';
+                document.getElementById('info-title').textContent = titles[currentLang][key] || 'Info';
                 document.getElementById('info-content').textContent = content;
                 document.getElementById('info-modal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
@@ -450,11 +647,10 @@
 
         function initCharts() {
             const ctxCost = document.getElementById('costComparisonChart').getContext('2d');
-            new Chart(ctxCost, { type: 'bar', data: { labels: ['传统漫游', 'Wi-Fi租赁', 'GlobalConnect'], datasets: [{ data: [12, 8.5, 1], backgroundColor: ['#e5e7eb', '#e5e7eb', '#2563eb'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display:false} } } });
+            new Chart(ctxCost, { type: 'bar', data: { labels: ['Roaming', 'Wi-Fi Rental', 'GlobalConnect'], datasets: [{ data: [12, 8.5, 1], backgroundColor: ['#e5e7eb', '#e5e7eb', '#2563eb'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display:false} } } });
             const ctxSpeed = document.getElementById('speedChart').getContext('2d');
-            new Chart(ctxSpeed, { type: 'line', data: { labels: ['亚洲', '北美', '欧洲', '东南亚'], datasets: [{ data: [85, 72, 68, 55], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display:false} } } });
+            new Chart(ctxSpeed, { type: 'line', data: { labels: ['Asia', 'USA', 'EU', 'SEA'], datasets: [{ data: [85, 72, 68, 55], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display:false} } } });
         }
     </script>
 </body>
-
 </html>
